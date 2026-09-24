@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {mkdtemp,stat,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createServer} from 'node:http';
+import {createModelSettings,endpoint} from './model-settings.js';
+const dir=await mkdtemp(join(tmpdir(),'canvas-settings-test-'));
+let authorization;
+const server=createServer((req,res)=>{authorization=req.headers.authorization;res.setHeader('Content-Type','application/json');res.end(JSON.stringify({data:[{id:'model-b'},{id:'model-a'},{id:'model-a'}]}));});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+try {
+  const baseUrl=`http://127.0.0.1:${server.address().port}/v1`;
+  const settings=await createModelSettings({},dir);
+  const input={baseUrl,model:'model-a',apiKey:'test-secret'};
+  assert.deepEqual((await settings.models(input)).models,['model-a','model-b']);
+  assert.equal(authorization,'Bearer test-secret');
+  const saved=await settings.save(input);
+  assert.equal(JSON.stringify(saved).includes('test-secret'),false);
+  assert.equal((await stat(join(dir,'model.json'))).mode & 0o777,0o600);
+  const reloaded=await createModelSettings({},dir);
+  assert.equal(reloaded.get().apiKey,'test-secret');
+  await reloaded.models({...input,apiKey:''});
+  assert.equal(authorization,'Bearer test-secret');
+  await reloaded.models({...input,baseUrl:baseUrl+'/different',apiKey:''});
+  assert.equal(authorization,undefined);
+  await reloaded.save({...input,apiKey:'',clearKey:true});
+  assert.equal(reloaded.publicValue().hasApiKey,false);
+  assert.throws(()=>endpoint('http://example.com/v1','/models'));
+  assert.throws(()=>endpoint('https://user:secret@example.com/v1','/models'));
+  console.log('PASS: model discovery, key redaction/persistence/permissions, changed-host protection, clear key, URL validation');
+} finally {server.close();await rm(dir,{recursive:true,force:true});}
