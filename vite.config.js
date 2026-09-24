@@ -1,12 +1,8 @@
-import { defineConfig, loadEnv } from 'vite';
-import { installThinkingBridge } from './thinking-bridge';
+import { defineConfig } from 'vite';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
-import { installTranscribeBridge } from './transcribe-bridge';
 
 export default defineConfig({ plugins: [{ name: 'canvas-command-bridge', configureServer(server) {
-  installThinkingBridge(server,{...process.env,...loadEnv(server.config.mode,process.cwd(),'')});
-  installTranscribeBridge(server);
   const wss = new WebSocketServer({ noServer: true });
   let client;
   const pending = new Map();

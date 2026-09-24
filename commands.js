@@ -1,7 +1,6 @@
 import { convertToExcalidrawElements, newElementWith, CaptureUpdateAction } from '@excalidraw/excalidraw';
 import { createElement } from 'react';
 import { flushSync } from 'react-dom';
-import {diagramSkeleton} from './diagram-layout';
 
 export function connectCommands(api, host) {
   const doc=host.ownerDocument;
@@ -52,15 +51,6 @@ export function connectCommands(api, host) {
     if(c.op==='add') {
       const created=convertToExcalidrawElements([{type:'text',text:text(),x:coordinate(c.x,100),y:coordinate(c.y,100+elements.length*50),fontSize:24}]);
       apply([...elements,...created]); return {createdIds:created.map(e=>e.id),...state()};
-    }
-    if(c.op==='renderDiagram') {
-      const skeleton=diagramSkeleton(c.diagram,c.batchId,c.sourceText,elements);
-      const existing=elements.filter(e=>e.customData?.batchId===c.batchId);
-      if(existing.length)return {createdIds:existing.map(e=>e.id),deduplicated:true,...state()};
-      const created=convertToExcalidrawElements(skeleton,{regenerateIds:false}).map(e=>({...e,customData:{...e.customData,batchId:c.batchId,sourceText:c.sourceText}}));
-      apply([...elements,...created]);
-      api.scrollToContent(created,{fitToContent:true});
-      return {createdIds:created.map(e=>e.id),...state()};
     }
     const target=find(c.id);
     if(c.op==='select') { api.updateScene({appState:{selectedElementIds:{[target.id]:true}}}); return state(); }
