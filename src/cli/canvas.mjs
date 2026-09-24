@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 const [op, ...args] = process.argv.slice(2);
+if(op==='serve'){
+  try{if(args.length)throw Error('serve takes no arguments; uses 127.0.0.1:5178');const {serve}=await import('../server/serve.js');await serve();console.log('Canvas ready: http://127.0.0.1:5178/ (Ctrl+C to stop)');}
+  catch(error){console.error(error.code==='EADDRINUSE'?'Port 5178 is in use. Stop the existing server first.':error.message);process.exitCode=1;}
+} else {
 if (!op || op === '--help' || op === 'help') {
-  console.log(`canvas list | state
+  console.log(`voice-canvas serve    Start the local canvas server
+voice-canvas list | state
 canvas add "文字" [--x 100 --y 100]
 canvas rename ID "新文字"
 canvas move ID --x 400 --y 200
@@ -32,3 +37,4 @@ try {
   console.log(JSON.stringify(result, null, 2));
   if (!response.ok) process.exitCode = 1;
 } catch (error) { console.error(JSON.stringify({error:error.message})); process.exitCode=1; }
+}

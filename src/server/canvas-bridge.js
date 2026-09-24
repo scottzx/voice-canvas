@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 
-export function canvasBridge() { return { name: 'canvas-command-bridge', configureServer(server) {
+export function installCanvasBridge(server) {
   const wss = new WebSocketServer({ noServer: true });
   let client;
   const pending = new Map();
@@ -33,4 +33,6 @@ export function canvasBridge() { return { name: 'canvas-command-bridge', configu
       client.send(JSON.stringify({ id, command }));
     });
   });
-}}; }
+}
+
+export function canvasBridge() { return { name: 'canvas-command-bridge', configureServer: installCanvasBridge }; }

@@ -4,7 +4,21 @@
 
 ## 启动
 
-需要 Node.js 22 或更新版本与 npm。
+### npm 安装（首次发布成功后可用）
+
+```sh
+npm install -g voice-canvas
+voice-canvas serve
+# 浏览器打开 http://127.0.0.1:5178/，另一个终端执行：
+voice-canvas add "新想法" --x 100 --y 100
+voice-canvas state
+```
+
+也可用 `npx voice-canvas serve` 启动。包内含预构建画布，运行时无需 Vite、React 开发依赖或任何模型配置。服务仅监听本机，端口固定 5178；如果开发服务器还在运行，请先停止它。
+
+### 从源码启动
+
+需要 Node.js 22.14 或更新版本与 npm。
 
 ```sh
 npm ci
@@ -78,3 +92,11 @@ CLI 测试覆盖新增、改名、移动、连线、选中、删除、撤销/重
 ## 许可证
 
 [MIT](LICENSE)。Excalidraw 等第三方依赖仍遵循各自许可证。
+
+## npm 发布维护
+
+工作流为 `.github/workflows/publish.yml`。首次发布前，在仓库的 Actions secrets 中设置 `NPM_TOKEN`，使用有权发布此包的 npm granular token，并满足 npm 的 2FA 发布要求；不要将 token 写进仓库或聊天。首次发布后可在 npm 包设置中配置 GitHub Trusted Publisher（owner `scottzx`，repo `voice-canvas`，workflow `publish.yml`），随后移除 token secret，使用 OIDC 发布。
+
+发布方式：更新 `package.json` 和锁文件中的版本并推送，创建与版本一致的 GitHub Release（例如 `v0.1.0`）。也可在 Actions 手动运行 Publish npm package，勾选 `publish`。不勾选时仅构建、测试及检查包内容。已发布的 npm 版本不能覆盖。
+
+工作流执行 `npm ci`、构建、独立服务器自动测试和包检查，成功后公开发布并附带 provenance。`npm run test:cli` 是需要真实浏览器的额外本地测试，不在无浏览器的发布流程中运行。

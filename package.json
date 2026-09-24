@@ -1,1 +1,23 @@
-{"name":"voice-canvas","version":"0.1.0","private":true,"license":"MIT","type":"module","scripts":{"dev":"vite --host 127.0.0.1 --port 5178 --strictPort","build":"vite build","test:cli":"node tests/cli.test.mjs"},"dependencies":{"@excalidraw/excalidraw":"^0.18.0","react":"^19.0.0","react-dom":"^19.0.0","ws":"^8.21.3"},"devDependencies":{"vite":"^6.0.0"}}
+{
+  "name": "voice-canvas",
+  "version": "0.1.0",
+  "description": "Local Excalidraw canvas with a command-line interface",
+  "license": "MIT",
+  "type": "module",
+  "engines": {"node": ">=22.14.0"},
+  "bin": {"voice-canvas": "src/cli/canvas.mjs"},
+  "files": ["dist", "src/cli", "src/server", "LICENSE", "README.md"],
+  "repository": {"type": "git", "url": "git+https://github.com/scottzx/voice-canvas.git"},
+  "homepage": "https://github.com/scottzx/voice-canvas#readme",
+  "bugs": {"url": "https://github.com/scottzx/voice-canvas/issues"},
+  "publishConfig": {"access": "public", "registry": "https://registry.npmjs.org/"},
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5178 --strictPort",
+    "build": "vite build",
+    "test:cli": "node tests/cli.test.mjs",
+    "test": "node --test tests/server.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {"ws": "^8.21.3"},
+  "devDependencies": {"@excalidraw/excalidraw": "^0.18.0", "react": "^19.0.0", "react-dom": "^19.0.0", "vite": "^6.0.0"}
+}
