@@ -1,5 +1,5 @@
 {
-  "name": "voice-canvas",
+  "name": "@1agents/voice-canvas",
   "version": "0.1.0",
   "description": "Local Excalidraw canvas with a command-line interface",
   "license": "MIT",

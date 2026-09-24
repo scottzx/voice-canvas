@@ -7,14 +7,14 @@
 ### npm 安装（首次发布成功后可用）
 
 ```sh
-npm install -g voice-canvas
+npm install -g @1agents/voice-canvas
 voice-canvas serve
 # 浏览器打开 http://127.0.0.1:5178/，另一个终端执行：
 voice-canvas add "新想法" --x 100 --y 100
 voice-canvas state
 ```
 
-也可用 `npx voice-canvas serve` 启动。包内含预构建画布，运行时无需 Vite、React 开发依赖或任何模型配置。服务仅监听本机，端口固定 5178；如果开发服务器还在运行，请先停止它。
+也可用 `npx @1agents/voice-canvas serve` 启动。包内含预构建画布，运行时无需 Vite、React 开发依赖或任何模型配置。服务仅监听本机，端口固定 5178；如果开发服务器还在运行，请先停止它。
 
 ### 从源码启动
 
