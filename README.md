@@ -33,7 +33,7 @@ npm run dev
 ./canvas json '{"op":"add","text":"新想法","x":100,"y":300}'
 ```
 
-也可使用 `node canvas.mjs ...`。返回 JSON，错误以非零状态退出。新增元素 ID 在 `result.createdIds` 中。`state` 返回元素、选中项和撤销/重做步数。
+也可使用 `node src/cli/canvas.mjs ...`。返回 JSON，错误以非零状态退出。新增元素 ID 在 `result.createdIds` 中。`state` 返回元素、选中项和撤销/重做步数。
 
 命令通过本地 HTTP `/api/canvas` 与 WebSocket `/canvas-ws` 转发给浏览器，执行并确认后返回。服务只监听 `127.0.0.1`，请勿暴露到公网。本机其他程序也可调用此接口，因此仅在可信本机环境使用。
 
@@ -45,7 +45,23 @@ npm run dev
 - 撤销/重做保存最近 100 次元素快照，刷新后历史不保留；图片文件不包含在快照中。
 - 正在拖动或编辑文字时拒绝 CLI 写入，完成编辑后重试。
 
-## 验证
+## 目录结构
+
+```text
+src/
+  main.jsx                # React 画布入口
+  commands.js             # 浏览器画布命令执行
+  style.css               # 页面样式
+  cli/canvas.mjs          # CLI 实现
+  server/canvas-bridge.js  # HTTP / WebSocket 桥接
+tests/
+  cli.test.mjs            # CLI 集成测试
+canvas                    # 稳定的 shell 启动入口
+index.html                # Vite HTML 入口
+vite.config.js            # 构建与开发服务配置
+```
+
+## 验证命令
 
 ```sh
 npm run build

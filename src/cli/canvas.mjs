@@ -10,7 +10,7 @@ canvas select ID
 canvas delete ID
 canvas undo | redo
 canvas json '{"op":"add","text":"内容"}'
-Use node canvas.mjs, or ./canvas after setup. All responses are JSON.
+Use node src/cli/canvas.mjs, or ./canvas after setup. All responses are JSON.
 Requires one open canvas at http://127.0.0.1:5178/.`);
   process.exit(0);
 }

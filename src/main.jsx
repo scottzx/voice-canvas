@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { connectCommands } from './commands';
+import { connectCommands } from './commands.js';
 import { createRoot } from 'react-dom/client';
 import { Excalidraw } from '@excalidraw/excalidraw';
 import '@excalidraw/excalidraw/index.css';
